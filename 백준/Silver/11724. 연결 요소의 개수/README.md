@@ -27,4 +27,4 @@
  <p>첫째 줄에 연결 요소의 개수를 출력한다.</p>
 
 ## 리뷰
- <p>BFS 사용. 시간 초과가 계속 발생했는데, python의 input 함수가 느린지 sys.stdin.readline으로 input방식을 바꿔 주니 통과됐다.</p>
+ <p>BFS 사용. 시간 초과가 계속 발생했는데, python의 input 함수가 느려서 그런지 sys.stdin.readline으로 input방식을 바꿔 주니 통과됐다.</p>
