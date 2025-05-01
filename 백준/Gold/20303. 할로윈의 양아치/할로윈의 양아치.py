@@ -1,38 +1,39 @@
 import sys
-from collections import deque
 N, M, K = map(int,input().split()) #아이들, 친구 관계, 울음소리 조건
 candy = list(map(int,input().split()))
 node = [i for i in range(N)]
 
-visited = [0 for i in range(N)]
-graph = [[]for i in range(N)]
-for _ in range(M):
-    a,b = map(int,sys.stdin.readline().split())
-    graph[a-1].append(b-1)
-    graph[b-1].append(a-1)
+def find(target):
+    if(node[target] != target):
+        node[target] = find(node[target])
+    return node[target]
 
-def bfs(start):
-    deq = deque()
-    deq.append(start)
-    kids = 0
-    candies = 0
-    while(deq):
-        cur = deq.popleft()
-        if(visited[cur]==1):
-            continue
-        kids += 1
-        candies += candy[cur]
-        visited[cur] = 1
-        for node in graph[cur]:
-            if(visited[node] == 0): #아직 방문 안한 경우
-                deq.append(node)
-    return kids,candies
+def union(x,y):
+    p_x = find(x)
+    p_y = find(y)
+    node[p_y] = p_x
+
+for _ in range(M): #union-find로 집합을 형성
+    a, b = map(int,sys.stdin.readline().split())
+    union(a-1,b-1)
+
+total_candy = {}
+total_kid = {}
+
+for idx,value in enumerate(node):
+    target = find(value)
+    if(target in total_candy):
+        total_candy[target] += candy[idx]
+        total_kid[target] += 1
+    else:
+        total_candy[target] = candy[idx]
+        total_kid[target] = 1
 
 temp = []
-for i in range(N):
-    if(visited[i] == 0):
-        k,c = bfs(i)
-        temp.append([k,c])
+
+for i in total_candy:
+    temp.append([total_kid[i],total_candy[i]])
+
 
 dp = [-1 for i in range(K)]
 dp[0] = 0
