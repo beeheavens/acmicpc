@@ -2,14 +2,16 @@ import heapq
 import sys
 N, M, X = map(int, sys.stdin.readline().split())
 
-# 인접 리스트로 변경
+# 정방향과 역방향 그래프 생성
 graph = [[] for _ in range(N+1)]
+reverse_graph = [[] for _ in range(N+1)]
 
 for _ in range(M):
     a, b, c = map(int, sys.stdin.readline().split())
-    graph[a].append((b, c))  # (도착노드, 비용)
+    graph[a].append((b, c))  # 정방향 그래프
+    reverse_graph[b].append((a, c))  # 역방향 그래프
             
-def dijkstra(start, end):
+def dijkstra(start, g):
     distance = [float('inf')] * (N+1)
     distance[start] = 0
     queue = [(0, start)]
@@ -19,24 +21,23 @@ def dijkstra(start, end):
         if distance[now] < dist:
             continue
         
-        for next_node, cost in graph[now]:
+        for next_node, cost in g[now]:
             new_cost = dist + cost
             if new_cost < distance[next_node]:
                 distance[next_node] = new_cost
                 heapq.heappush(queue, (new_cost, next_node))
                 
-    return distance[end]
+    return distance
 
-go = []
+# X에서 모든 노드로 가는 최단 거리 (정방향)
+go = dijkstra(X, graph)
+
+# 모든 노드에서 X로 가는 최단 거리 (역방향)
+back = dijkstra(X, reverse_graph)
+
+ans = 0
 for i in range(1, N+1):
-    go.append(dijkstra(i, X))
-    
-back = []
-for i in range(1, N+1):
-    back.append(dijkstra(X, i))
+    if i != X:
+        ans = max(ans, go[i] + back[i])
 
-ans = []
-for i in range(N):
-    ans.append(go[i] + back[i])
-
-print(max(ans))
+print(ans)
