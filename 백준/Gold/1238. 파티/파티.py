@@ -1,11 +1,12 @@
 import heapq
-N, M, X = map(int, input().split())
+import sys
+N, M, X = map(int, sys.stdin.readline().split())
 
 # 인접 리스트로 변경
 graph = [[] for _ in range(N+1)]
 
 for _ in range(M):
-    a, b, c = map(int, input().split())
+    a, b, c = map(int, sys.stdin.readline().split())
     graph[a].append((b, c))  # (도착노드, 비용)
             
 def dijkstra(start, end):
