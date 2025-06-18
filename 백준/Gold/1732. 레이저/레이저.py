@@ -1,7 +1,8 @@
-N = int(input())
+import sys
+N = int(sys.stdin.readline())
 buildings = []
 for _ in range(N):
-    buildings.append(list(map(int,input().split())))
+    buildings.append(list(map(int,sys.stdin.readline().split())))
 
 buildings.sort(key = lambda x : (x[0]**2 + x[1]**2))
 
